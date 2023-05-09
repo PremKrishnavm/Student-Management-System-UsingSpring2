@@ -18,6 +18,7 @@ public class AdminDao {
 	@Autowired
 	private AdminRepo adminRepo;
 	
+	
 	public Admin saveAdmin(Admin admin) {
 		return adminRepo.save(admin);
 	}
@@ -31,6 +32,7 @@ public class AdminDao {
 			return admin;
 		}
 	}
+	
 	public Admin updateAdminById(int adminId,Admin admin) {
 		Optional<Admin> optional = adminRepo.findById(adminId);
 		if(optional.isEmpty()) {
@@ -39,5 +41,15 @@ public class AdminDao {
 			admin.setAdminId(adminId);
 			return adminRepo.save(admin);
 		}
+	}
+	
+	public Admin deleteAdminBuId(int adminId) {
+		 Optional<Admin> optional = adminRepo.findById(adminId);
+		 if(optional.isEmpty()) {
+			 return null;
+		 }else {
+			 adminRepo.deleteById(adminId);
+			 return optional.get();
+		 }
 	}
 }

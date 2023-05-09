@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import edu.training.student_management_system.dao.AdminDao;
 import edu.training.student_management_system.dao.StudentDao;
 import edu.training.student_management_system.entity.Admin;
@@ -35,5 +34,36 @@ public class StudentService {
 		adminDao.saveAdmin(admin);
 		
 		return student2;
+	}
+	
+	public Student findStudentById(int studentId) {
+		return studentDao.findStudentById(studentId);
+	}
+	
+	public Student updateStudentById(int studentId,Student student) {
+		return studentDao.updateStudentById(studentId, student);
+	}
+	
+	public Student deleteStudentById(int studentId, int adminId) {
+		Student student = studentDao.findStudentById(studentId);
+		if(student!=null) {
+			 Admin admin = adminDao.findAdminById(adminId);
+			 if(admin!=null) {
+				 List<Student> students = admin.getStudents();
+				 students.remove(student);
+				 admin.setStudents(students);
+				 adminDao.updateAdminById(adminId, admin);
+				 studentDao.deleteStudentBuId(studentId);
+				 return student;
+			 }else {
+				 return null;
+			 }
+		}else {
+			return null;
+		}
+	}
+	
+	public List<Student> getStudents(int adminId){
+		return studentDao.getStudents(adminId);
 	}
 }
